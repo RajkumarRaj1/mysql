@@ -1,0 +1,65 @@
+
+use ecommerce
+
+-- Retrieve all customers who have placed 
+-- an order in the last 30 days.
+SELECT distinct customers. * 
+FROM customers   
+JOIN orders  ON customers.id = orders.customer_id
+WHERE order_date >=CURDATE() - Interval 30 Day;
+
+-- Get the total amount of all orders placed by each customer.
+SELECT customers.id, SUM(orders.total_amount) AS total_spent
+FROM customers 
+JOIN orders  ON customers.id = orders.customer_id
+GROUP BY customers.id;
+
+-- Update the price of Product C to 45.00  
+update products set price=40.00 
+where id=1
+
+-- Add a new column discount to the products table
+ALTER table products 
+add column discount decimal(5,2)
+
+-- Retrieve the top 3 products with the highest price:
+select * from products 
+order by price desc
+limit 3 
+
+-- Get the names of customers who have ordered Product A:
+SELECT  distinct c.cus_name 
+FROM customers c
+JOIN orders o ON c.id = o.customer_id
+JOIN order_items oi ON o.id = oi.order_id
+JOIN products p ON oi.product_id = p.id
+WHERE p.p_name = 'shirt'
+
+-- Join the orders and customers tables to retrieve the
+-- customer's name and order date for each order.
+SELECT c.cus_name, o.order_date
+FROM customers c
+JOIN orders o ON c.id = o.customer_id;
+
+-- Retrieve the orders with a total amount greater than 150.00.
+SELECT * FROM Orders where total_amount>400.00
+
+-- Normalize the database by creating a separate table for order items.
+-- Create order_items Table
+CREATE TABLE order_items (
+id INT AUTO_INCREMENT ,
+order_id INT(20) NOT NULL,
+product_id INT(20) NOT NULL,
+quantity INT(20) NOT NULL,
+PRIMARY KEY(`id`)
+FOREIGN KEY (order_id) REFERENCES orders(id),
+FOREIGN KEY (product_id) REFERENCES products(id)
+);
+-- Retrieve the average total of all orders.
+SELECT AVG(total_amount) AS average 
+from orders
+
+
+
+
+
